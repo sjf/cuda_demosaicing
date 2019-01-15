@@ -1,0 +1,18 @@
+#!/bin/bash
+BI_CPU=bilinear_cpu.txt
+BI_GPU=bilinear_cuda.txt
+AHD_CPU=ahd_cpu.txt
+AHD_GPU=ahd_cuda.txt
+MASK_AHD=mask_ahd.txt
+BI_CPU_CV=bilinear_cpu.csv
+BI_GPU_CV=bilinear_cuda.csv
+AHD_CPU_CV=ahd_cpu.csv
+AHD_GPU_CV=ahd_cuda.csv
+MASK_AHD_CV=mask_ahd.csv
+set -x
+
+average_results.pl $BI_CPU > $BI_CPU_CV
+average_results.pl $BI_GPU > $BI_GPU_CV
+average_results.pl $AHD_CPU > $AHD_CPU_CV
+average_results.pl $AHD_GPU > $AHD_GPU_CV
+average_results.pl $MASK_AHD > $MASK_AHD_CV

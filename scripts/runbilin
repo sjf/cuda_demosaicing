@@ -1,0 +1,3 @@
+image.py bayer $1 $1.ppm
+~/eclipse/workspace/proj/proj -l $1.ppm
+gthumb $1.out.ppm

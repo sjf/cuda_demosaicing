@@ -1,0 +1,43 @@
+#!/bin/bash
+
+#BI=$(echo $@|grep bi)
+#AHD=$(echo $@|grep ahd)
+#MASK=$(echo $@|grep mask)
+#CUDA=$(echo $@|grep cuda)
+
+N=6
+#if [ -n "$BI" ];then
+#  > $BI_CPU
+#fi
+#if [ -n "$CUDA" ];then
+#    > $BI_GPU
+#    > $AHD_GPU
+#fi
+
+#if [ -n "$AHD" ];then
+#  > $AHD_CPU
+#fi
+#if [ -n "$MASK" ];then
+#  > $MASK_AHD
+#fi
+
+DIR=$HOME/ACS_project/proj
+cp $DIR/proj .
+cp $DIR/py/image_sizes.pl .
+cp $DIR/py/run_individual_test .
+
+echo "Starting $(date)" >> run_tests
+
+CMD="./proj -n -t1"
+for f in $(ls [a-zA-Z]*[0-9].ppm|sort -n); do
+  echo Running tests on $f
+  ./image_sizes.pl $f
+
+  for ff in $(ls _*[0-9].ppm|sort -n);do
+    ./run_individual_test $@ $ff
+  done
+mv _*_05*.ppm results
+rm _*.ppm
+done
+echo "Ended $(date)" >> run_tests
+

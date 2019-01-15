@@ -1,0 +1,97 @@
+#!/bin/bash
+
+if [ -z "$(echo $@ | egrep 'bi|mask|m2|cuda|ahd|ahdcpu')" ]; then
+ echo "Running all tests"
+ BI="bi"
+ AHDCPU="ahdcpu"
+ AHD="ahd"
+ MASK="mask"
+ CUDA="cuda"
+ MASK2="m2"
+else
+ echo $@
+ BI=$(echo $@|grep bi)
+ AHDCPU=$(echo $@|grep ahdcpu)
+ AHD=$(echo $@|grep ahd)
+ MASK=$(echo $@|grep mask)
+ CUDA=$(echo $@|grep cuda)
+ MASK2=$(echo $@|grep m2)
+fi
+
+N=6
+
+BI_CPU=bilinear_cpu.txt
+BI_GPU=bilinear_cuda.txt
+AHD_CPU=ahd_cpu.txt
+AHD_GPU=ahd_cuda.txt
+MASK_AHD=mask_ahd.txt
+MASK2=mask2.txt
+#if [ -n "$BI" ];then
+#  > $BI_CPU
+#fi
+#if [ -n "$CUDA" ];then
+#    > $BI_GPU
+#    > $AHD_GPU
+#fi
+
+#if [ -n "$AHD" ];then
+#  > $AHD_CPU
+#fi
+#if [ -n "$MASK" ];then
+#  > $MASK_AHD
+#fi
+
+CMD="proj -n -t1"
+
+files=""
+for arg in $@; do
+  if [ $(echo $arg|grep ppm\$) ];then
+    files="$files $arg"
+  fi
+done
+echo $files
+
+for ff in $files;do
+
+for i in $(seq 1 $N);do
+  if [ -n "$BI" ];then
+   $CMD -l $ff 2>&1   | tee -a  $BI_CPU
+  fi
+  done
+
+# AHD cpu
+  if [ -n "$AHDCPU" ];then
+   for i in $(seq 1 $N);do 
+     $CMD -a 1 $ff 2>&1 | tee -a $AHD_CPU
+  done
+  fi
+
+# cuda bi
+  if [ -n "$CUDA" -a -n "$BI" ];then
+   for i in $(seq 1 $N);do
+   $CMD -l -c $ff 2>&1 | tee -a  $BI_GPU
+   done
+  fi
+# cuda ahd
+  if [ -n "$CUDA" -a -n "$AHD" ];then
+   for i in $(seq 1 $N);do
+   $CMD -a 1 -c $ff 2>&1 | tee -a $AHD_GPU
+   done
+  fi
+
+# mask
+  if [ -n "$MASK"  ];then
+   for i in $(seq 1 $N);do
+     $CMD -a 1 -m $ff 2>&1 | tee -a $MASK_AHD
+   done
+  fi
+
+# mask 2
+  if [ -n "$MASK2"  ];then
+   for i in $(seq 1 $N);do
+     $CMD -a 1 -j $ff 2>&1 | tee -a $MASK2
+   done
+  fi
+
+done
+

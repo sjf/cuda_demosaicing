@@ -1,0 +1,18 @@
+#!/bin/bash
+if [ -z "$1" ]; then
+  PS=$(echo *.orig.ppm)
+else 
+ PS="$@"
+fi
+for f in $PS;do 
+  f=$(pwd)/$f; 
+  ff=$(newext $f gunturk.ppm .orig.ppm); 
+  if [ -f $ff ]; then 
+    echo $ff exists; 
+  else  
+    c="i=imread('$f');[out_pocs,out_bilinear] = demopocs(i);imwrite(out_pocs,'$ff')" 
+    echo $c
+    echo $c| matlabrun 
+
+  fi; 
+done

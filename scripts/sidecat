@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+import re
+def r(name):
+    l = map(lambda x: x.strip(),open(name).readlines())
+    l = filter(lambda x:not x.startswith("++"),l)
+    l = filter(lambda x: not ':' in x,l)
+    return l
+def todict(l):
+    d={}
+    for x in l:
+        (name,x,y,t) = x.split(", ")
+        d[name] = [x,y,t]
+    return d
+
+m = todict(r('mask.csv'))
+a = todict(r('ahd.csv'))
+b = todict(r('bilin.csv'))
+
+l = map(lambda x: x.strip(),open('mask.csv').readlines())
+mask = -1
+for x in l:
+    mat = re.match(".*Mask: ([0-9.]+)%",x)
+    if mat:
+        mask = float(mat.groups()[0])
+        
+    mat = re.match("(.*.ppm), ",x)
+    if mat:
+        name = mat.groups()[0]
+        m[name].append(mask)
+
+print "Image, X, Y, No. Pixels, Bilinear (ms), AHD (ms), AHD mask (ms), Mask %"
+for p in m.keys():
+    x = int(m[p][0])
+    y = int(m[p][1])
+    res = x * y
+    print "%s, %i, %i, %i, %s, %s, %s, %s" \
+         %( p,  x,  y,res,b[p][2],a[p][2],m[p][2],m[p][3])
+
+
+
+
+    

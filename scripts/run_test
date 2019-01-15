@@ -1,0 +1,18 @@
+#!/bin/bash
+set -x
+>mask.csv
+>ahd.csv
+>bilin.csv
+rm -f *.bilin.ppm
+rm -f *.ahd.ppm
+rm -f *.ahdmask.ppm
+FILES=$(echo *.ppm)
+for f in $FILES;do 
+proj -l -t1 $f | tee -a bilin.csv;
+done
+for f in $FILES;do
+proj -m -t1 $f |tee -a mask.csv;
+done
+for f in $FILES;do
+proj -a1 -t1 $f |tee -a ahd.csv;
+done

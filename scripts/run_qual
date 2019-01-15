@@ -1,0 +1,18 @@
+#!/usr/bin/perl
+@fs=glob('*.orig.ppm');
+
+for $f (@fs) {
+  ($b = $f) =~ s/.orig.ppm/.bilin.ppm/;
+  ($a = $f) =~ s/.orig.ppm/.ahd.ppm/;
+  ($m = $f) =~ s/.orig.ppm/.ahdmask.ppm/;
+  ($m2 = $f)=~ s/.orig.ppm/.ahdmask2.ppm/;
+  @ts = ($b,$a,$m,$m2);
+  for $t (@ts){
+  $c="zipcompare $f $t\n";
+  print $c;
+  system($c);
+}
+}
+
+
+
