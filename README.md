@@ -1,4 +1,4 @@
-#cuda_demosaicing
+# cuda_demosaicing
 
 Demosaics RAW images on the GPU. This is the source code for the Cambridge MPhil project: https://www.dar.cam.ac.uk/drupal7/sites/default/files/Documents/publications/dcrr011.pdf.
 
