@@ -1,4 +1,5 @@
 #cuda_demosaicing
+
 Demosaics RAW images on the GPU. This is the source code for the Cambridge MPhil project: https://www.dar.cam.ac.uk/drupal7/sites/default/files/Documents/publications/dcrr011.pdf.
 
 Demosaicing is the process of converting raw sensor data into an RGB image. Sensors only collect only a single color at each pixel point, so the other RGB values have to be interpolated. However, this can lead to artefacts in the final image, in particular zippering on high contrast edges. More complex methods have emerged to prevent artefacts, the best being Adapative Homegenity Directed Demosaicing. But due to the complexity of the algorithm and the size of the images involved, demosaicing can be time consuming. This project is an investigation into how the GPU can be used to make this faster.
